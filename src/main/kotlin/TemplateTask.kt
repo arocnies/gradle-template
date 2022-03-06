@@ -1,33 +1,27 @@
-import freemarker.template.Configuration
-import freemarker.template.Version
 import org.gradle.api.internal.file.copy.CopyAction
-import org.gradle.api.tasks.*
+import org.gradle.api.tasks.Copy
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.OutputFiles
+import org.gradle.api.tasks.WorkResults
 import java.io.File
 import java.nio.file.Path
-import kotlin.io.path.createDirectories
-import kotlin.io.path.createFile
-import kotlin.io.path.notExists
 import kotlin.io.path.relativeTo
 
+@Suppress("unused")
 abstract class TemplateTask : Copy() {
-    @Internal
-    val configuration = Configuration(Version("2.3.31")).apply {
-        defaultEncoding = "UTF-8"
-        templateExceptionHandler = freemarker.template.TemplateExceptionHandler.RETHROW_HANDLER
-        logTemplateExceptions = false
-        fallbackOnNullLoopVariable = false
-    }
-
     private val _templatedFiles = mutableListOf<File>()
+
+    @Suppress("unused")
     val templatedFiles: List<File>
         @OutputFiles get() = _templatedFiles
 
     @Input
     var data = mutableMapOf<String, Any?>()
 
-    override fun createCopyAction(): CopyAction {
-        configuration.templateLoader = FileTreeTemplateLoader(mainSpec.buildRootResolver().allSource)
+    private val templateProcessor: TemplateProcessor = FreemarkerTemplateProcessor()
 
+    override fun createCopyAction(): CopyAction {
+        templateProcessor.load(mainSpec.buildRootResolver().allSource)
         return CopyAction { stream ->
             stream.process { details ->
                 if (!details.isDirectory) {
@@ -40,25 +34,17 @@ abstract class TemplateTask : Copy() {
         }
     }
 
-    private fun processTemplate(source: Path, destination: Path) = destination.apply {
+    private fun processTemplate(source: Path, destination: Path) {
         println(
-            "Processing template " +
-                    "\"${source.relativeTo(project.projectDir.toPath())}\" " +
-                    "into \"${destination.relativeTo(project.projectDir.toPath())}\""
+            "Processing template \"${source.relativeTo(project.projectDir.toPath())}\" into \"${
+                destination.relativeTo(project.projectDir.toPath())
+            }\""
         )
-
-        parent.createDirectories()
-        if (notExists()) createFile()
-        val writer = this.toFile().writer()
-        configuration.getTemplate(getTemplateKey(source)).process(getTemplateProperties(), writer)
-        _templatedFiles += source.toFile()
+        val didTemplate = templateProcessor.processTemplate(source, destination, getTemplateData())
+        if (didTemplate) _templatedFiles += destination.toFile()
     }
 
-    private fun getTemplateKey(path: Path): String {
-        return path.fileName.toString()
-    }
-
-    private fun getTemplateProperties(): Map<String, *> {
+    private fun getTemplateData(): Map<String, *> {
         return data.toMutableMap() + ("properties" to project.properties)
     }
 }
