@@ -30,9 +30,9 @@ class TemplateTaskFunctionalTest {
         getSettingsFile().writeText("")
         getBuildFile().writeText(
             """
-            import dev.nies.build.template.TemplateTask
+            import dev.nies.gradle.template.TemplateTask
             plugins {
-                id('dev.nies.build.template')
+                id('dev.nies.gradle.template')
             }
             tasks.register("testTemplating", TemplateTask) {
                 data += [test: "template"]

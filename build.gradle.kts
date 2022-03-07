@@ -18,8 +18,8 @@ dependencies {
 
 gradlePlugin {
     val template by plugins.creating {
-        id = "dev.nies.build.template"
-        implementationClass = "dev.nies.build.template.BuildTemplatesPlugin"
+        id = "dev.nies.gradle.template"
+        implementationClass = "dev.nies.gradle.template.TemplatePlugin"
     }
 }
 

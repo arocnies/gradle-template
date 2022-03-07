@@ -4,7 +4,7 @@ import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import kotlin.test.Test
 
-class BuildSrcPluginFunctionalTest {
+class TemplatePluginFunctionalTest {
     @get:Rule
     val tempFolder = TemporaryFolder()
 
@@ -24,7 +24,7 @@ class BuildSrcPluginFunctionalTest {
         getBuildFile().writeText(
             """
             plugins {
-                id('dev.nies.build.template')
+                id('dev.nies.gradle.template')
             }
             """.trimIndent()
         )
