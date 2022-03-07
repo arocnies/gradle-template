@@ -30,6 +30,7 @@ class TemplateTaskFunctionalTest {
         getSettingsFile().writeText("")
         getBuildFile().writeText(
             """
+            import dev.nies.build.template.TemplateTask
             plugins {
                 id('dev.nies.build.template')
             }
