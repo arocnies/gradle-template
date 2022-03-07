@@ -9,9 +9,10 @@ import java.nio.file.Path
 import kotlin.io.path.createDirectories
 import kotlin.io.path.createFile
 import kotlin.io.path.notExists
+import kotlin.io.path.writer
 
 class FreemarkerTemplateProcessor : TemplateProcessor {
-    private val configuration = Configuration(Version("2.3.31")).apply {
+    private val configuration: Configuration = Configuration(Version("2.3.31")).apply {
         defaultEncoding = "UTF-8"
         templateExceptionHandler = freemarker.template.TemplateExceptionHandler.RETHROW_HANDLER
         logTemplateExceptions = false
@@ -25,8 +26,9 @@ class FreemarkerTemplateProcessor : TemplateProcessor {
     override fun processTemplate(source: Path, destination: Path, data: Map<String, Any?>): Boolean {
         destination.parent.createDirectories()
         if (destination.notExists()) destination.createFile()
-        val writer = destination.toFile().writer()
-        configuration.getTemplate(getTemplateKey(source)).process(data, writer)
+        destination.writer().use {
+            configuration.getTemplate(getTemplateKey(source)).process(data, it)
+        }
         return true
     }
 }

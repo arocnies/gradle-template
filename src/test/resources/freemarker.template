@@ -1,0 +1,3 @@
+Test message: ${message}
+Test property objects: ${obj.text}
+Test obj methods: ${obj.method()}

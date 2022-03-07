@@ -14,6 +14,8 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
 
     implementation("org.freemarker:freemarker:2.3.31")
+    implementation("org.apache.velocity:velocity:1.7")
+    implementation("org.apache.velocity:velocity-tools:2.0")
 }
 
 gradlePlugin {
