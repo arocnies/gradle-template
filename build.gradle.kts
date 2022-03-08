@@ -1,7 +1,12 @@
 plugins {
     `java-gradle-plugin`
+    `maven-publish`
+    id("com.gradle.plugin-publish") version "0.20.0"
     id("org.jetbrains.kotlin.jvm") version "1.6.10"
 }
+
+version = "0.0.2"
+group = "dev.nies.gradle.template"
 
 repositories {
     mavenCentral()
@@ -36,4 +41,17 @@ val functionalTest by tasks.registering(Test::class) {
 gradlePlugin.testSourceSets(functionalTestSourceSet)
 tasks.named<Task>("check") {
     dependsOn(functionalTest)
+}
+
+pluginBundle {
+    website = "https://github.com/arocnies/gradle-template"
+    vcsUrl = "https://github.com/arocnies/gradle-template"
+    description = "Adds templating tasks for use in Gradle builds. " +
+            "Templating engines include: Freemarker. WIP: Velocity, Thymeleaf, Pebble, KorTE"
+    (plugins) {
+        "template" {
+            displayName = "Template Plugin"
+            tags = listOf("template", "properties", "Freemarker", "Velocity", "Thymeleaf")
+        }
+    }
 }
