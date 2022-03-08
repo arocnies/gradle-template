@@ -9,7 +9,7 @@ plugins {
     id('dev.nies.gradle.template')
 }
 
-tasks.register("testTemplating", TemplateTask) {
+tasks.register("template", TemplateTask) {
     data += [key: "value"]
     from('src/templates')
     into('build/templates')
