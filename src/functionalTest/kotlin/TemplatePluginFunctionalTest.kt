@@ -24,7 +24,7 @@ class TemplatePluginFunctionalTest {
         getBuildFile().writeText(
             """
             plugins {
-                id('dev.nies.gradle.template')
+                id('dev.anies.gradle.template')
             }
             """.trimIndent()
         )

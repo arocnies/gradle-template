@@ -68,9 +68,9 @@ class TemplateTaskFunctionalTest {
         getSettingsFile().writeText("")
         getBuildFile().writeText(
             """
-            import dev.nies.gradle.template.TemplateTask
+            import dev.anies.gradle.template.TemplateTask
             plugins {
-                id('dev.nies.gradle.template')
+                id('dev.anies.gradle.template')
             }
             
             tasks.register("copyFile", Copy) {

@@ -1,4 +1,4 @@
-package dev.nies.gradle.template
+package dev.anies.gradle.template
 
 import freemarker.cache.TemplateLoader
 import org.gradle.api.file.FileTree

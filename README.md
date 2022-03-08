@@ -6,7 +6,7 @@ Template files during a gradle build.
 
 ```groovy
 plugins {
-    id('dev.nies.gradle.template')
+    id('dev.anies.gradle.template')
 }
 
 tasks.register("template", TemplateTask) {
@@ -22,7 +22,7 @@ Currently the only available engine is **Freemarker**, which is used by default.
 
 Other engines are in progress with partial implementations completed.
 
-Engines:
+### Engines:
 
 - Freemarker: Available
 - Velocity: Implemented & Unavailable

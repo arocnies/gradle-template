@@ -1,6 +1,6 @@
-package dev.nies.gradle.template.velocity
+package dev.anies.gradle.template.velocity
 
-import dev.nies.gradle.template.TemplateProcessor
+import dev.anies.gradle.template.TemplateProcessor
 import org.apache.velocity.Template
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.VelocityEngine

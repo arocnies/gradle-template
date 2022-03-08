@@ -1,4 +1,4 @@
-import dev.nies.gradle.template.freemarker.FreemarkerTemplateProcessor
+import dev.anies.gradle.template.freemarker.FreemarkerTemplateProcessor
 import org.gradle.testfixtures.ProjectBuilder
 import java.io.File
 import kotlin.io.path.readText

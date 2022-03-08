@@ -1,4 +1,4 @@
-import dev.nies.gradle.template.velocity.VelocityTemplateProcessor
+import dev.anies.gradle.template.velocity.VelocityTemplateProcessor
 import org.gradle.testfixtures.ProjectBuilder
 import java.io.File
 import kotlin.io.path.readText

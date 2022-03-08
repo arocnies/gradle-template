@@ -1,7 +1,7 @@
-package dev.nies.gradle.template.freemarker
+package dev.anies.gradle.template.freemarker
 
-import dev.nies.gradle.template.FileTreeTemplateLoader
-import dev.nies.gradle.template.TemplateProcessor
+import dev.anies.gradle.template.FileTreeTemplateLoader
+import dev.anies.gradle.template.TemplateProcessor
 import freemarker.template.Configuration
 import freemarker.template.Version
 import org.gradle.api.file.FileTree

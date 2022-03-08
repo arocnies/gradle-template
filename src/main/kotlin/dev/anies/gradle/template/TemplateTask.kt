@@ -1,6 +1,6 @@
-package dev.nies.gradle.template
+package dev.anies.gradle.template
 
-import dev.nies.gradle.template.freemarker.FreemarkerTemplateProcessor
+import dev.anies.gradle.template.freemarker.FreemarkerTemplateProcessor
 import org.gradle.api.internal.file.copy.CopyAction
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Input

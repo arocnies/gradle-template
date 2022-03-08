@@ -6,7 +6,7 @@ plugins {
 }
 
 version = "0.0.2"
-group = "dev.nies.gradle.template"
+group = "dev.anies.gradle.template"
 
 repositories {
     mavenCentral()
@@ -25,8 +25,8 @@ dependencies {
 
 gradlePlugin {
     val template by plugins.creating {
-        id = "dev.nies.gradle.template"
-        implementationClass = "dev.nies.gradle.template.TemplatePlugin"
+        id = "dev.anies.gradle.template"
+        implementationClass = "dev.anies.gradle.template.TemplatePlugin"
     }
 }
 

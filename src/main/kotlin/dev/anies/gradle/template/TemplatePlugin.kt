@@ -1,4 +1,4 @@
-package dev.nies.gradle.template
+package dev.anies.gradle.template
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
