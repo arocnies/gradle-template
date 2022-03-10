@@ -1,6 +1,6 @@
 package dev.anies.gradle.template
 
-import dev.anies.gradle.template.freemarker.FreemarkerTemplateProcessor
+import dev.anies.gradle.template.freemarker.FreemarkerTemplateEngine
 import org.gradle.api.internal.file.copy.CopyAction
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Input
@@ -20,10 +20,10 @@ abstract class TemplateTask : Copy() {
     var data = mutableMapOf<String, Any?>()
 
     private val _templatedFiles = mutableListOf<File>()
-    private val templateProcessor: TemplateProcessor = FreemarkerTemplateProcessor()
+    private val templateEngine: TemplateEngine = FreemarkerTemplateEngine()
 
     override fun createCopyAction(): CopyAction {
-        templateProcessor.load(mainSpec.buildRootResolver().allSource)
+        templateEngine.load(mainSpec.buildRootResolver().allSource)
         return CopyAction { stream ->
             stream.process { details ->
                 if (!details.isDirectory) {
@@ -42,7 +42,7 @@ abstract class TemplateTask : Copy() {
                 destination.relativeTo(project.projectDir.toPath())
             }\""
         )
-        val didTemplate = templateProcessor.processTemplate(source, destination, getTemplateData())
+        val didTemplate = templateEngine.processTemplate(source, destination, getTemplateData())
         if (didTemplate) _templatedFiles += destination.toFile()
     }
 

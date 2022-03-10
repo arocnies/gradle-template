@@ -1,15 +1,15 @@
-import dev.anies.gradle.template.freemarker.FreemarkerTemplateProcessor
+import dev.anies.gradle.template.velocity.VelocityTemplateEngine
 import org.gradle.testfixtures.ProjectBuilder
 import java.io.File
 import kotlin.io.path.readText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class FreemarkerTemplateProcessorTest {
+class VelocityTemplateEngineTest {
     @Test
-    fun `Freemarker processor templates basic file`() {
-        val processor = FreemarkerTemplateProcessor()
-        val source = File(javaClass.getResource("freemarker.template").toURI()).toPath()
+    fun `Velocity templates basic file`() {
+        val engine = VelocityTemplateEngine()
+        val source = File(javaClass.getResource("velocity.template").toURI()).toPath()
         val dest = kotlin.io.path.createTempFile().toAbsolutePath()
         @Suppress("unused") val data = mapOf(
             "message" to "test-message",
@@ -19,8 +19,8 @@ class FreemarkerTemplateProcessorTest {
             }
         )
         val project = ProjectBuilder.builder().build()
-        processor.load(project.fileTree(source))
-        processor.processTemplate(source, dest, data)
+        engine.load(project.fileTree(source))
+        engine.processTemplate(source, dest, data)
 
         assertEquals(
             """

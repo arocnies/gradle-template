@@ -1,7 +1,7 @@
 package dev.anies.gradle.template.freemarker
 
 import dev.anies.gradle.template.FileTreeTemplateLoader
-import dev.anies.gradle.template.TemplateProcessor
+import dev.anies.gradle.template.TemplateEngine
 import freemarker.template.Configuration
 import freemarker.template.Version
 import org.gradle.api.file.FileTree
@@ -11,7 +11,7 @@ import kotlin.io.path.createFile
 import kotlin.io.path.notExists
 import kotlin.io.path.writer
 
-class FreemarkerTemplateProcessor : TemplateProcessor {
+class FreemarkerTemplateEngine : TemplateEngine {
     private val configuration: Configuration = Configuration(Version("2.3.31")).apply {
         defaultEncoding = "UTF-8"
         templateExceptionHandler = freemarker.template.TemplateExceptionHandler.RETHROW_HANDLER

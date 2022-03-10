@@ -1,6 +1,6 @@
 package dev.anies.gradle.template.velocity
 
-import dev.anies.gradle.template.TemplateProcessor
+import dev.anies.gradle.template.TemplateEngine
 import org.apache.velocity.Template
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.VelocityEngine
@@ -8,7 +8,7 @@ import org.gradle.api.file.FileTree
 import java.nio.file.Path
 import kotlin.io.path.writer
 
-class VelocityTemplateProcessor : TemplateProcessor {
+class VelocityTemplateEngine : TemplateEngine {
     private val engine = VelocityEngine()
     private val templates = mutableMapOf<String, Template>()
 
