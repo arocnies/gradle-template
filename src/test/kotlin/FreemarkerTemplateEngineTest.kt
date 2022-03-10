@@ -19,7 +19,6 @@ class FreemarkerTemplateEngineTest {
             }
         )
         val project = ProjectBuilder.builder().build()
-        engine.configure()
         engine.load(project.fileTree(source))
         engine.processTemplate(source, dest, data)
 

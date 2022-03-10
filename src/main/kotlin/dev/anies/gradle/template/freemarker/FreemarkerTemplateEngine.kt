@@ -12,7 +12,11 @@ import kotlin.io.path.notExists
 import kotlin.io.path.writer
 
 class FreemarkerTemplateEngine : TemplateEngine<Configuration> {
-    private var configuration: Configuration? = null
+    private lateinit var configuration: Configuration
+
+    init {
+        configure()
+    }
 
     override fun configure(block: Configuration.() -> Unit) {
         val config = Configuration(Version("2.3.31")).apply {
@@ -26,20 +30,14 @@ class FreemarkerTemplateEngine : TemplateEngine<Configuration> {
     }
 
     override fun load(fileTree: FileTree) {
-        val config = configuration
-            ?: throw IllegalStateException("Not configured. Cannot load templates before being configured.")
-
-        config.templateLoader = FileTreeTemplateLoader(fileTree)
+        configuration.templateLoader = FileTreeTemplateLoader(fileTree)
     }
 
     override fun processTemplate(source: Path, destination: Path, data: Map<String, Any?>): Boolean {
-        val config = configuration
-            ?: throw IllegalStateException("Not configured. Cannot process templates before being configured.")
-
         destination.parent.createDirectories()
         if (destination.notExists()) destination.createFile()
         destination.writer().use {
-            config.getTemplate(getTemplateKey(source)).process(data, it)
+            configuration.getTemplate(getTemplateKey(source)).process(data, it)
         }
         return true
     }

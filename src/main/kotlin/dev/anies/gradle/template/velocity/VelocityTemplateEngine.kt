@@ -9,26 +9,27 @@ import java.nio.file.Path
 import kotlin.io.path.writer
 
 class VelocityTemplateEngine : TemplateEngine<VelocityEngine> {
-    private var velocityEngine: VelocityEngine? = null
+    private lateinit var engine: VelocityEngine
     private val templates = mutableMapOf<String, Template>()
 
+    init {
+        configure()
+    }
+
     override fun configure(block: VelocityEngine.() -> Unit) {
-        val engine = VelocityEngine()
-        engine.addProperty("resource.loader", "file")
-        engine.addProperty(
+        val engineBuilder = VelocityEngine()
+        engineBuilder.addProperty("resource.loader", "file")
+        engineBuilder.addProperty(
             "file.resource.loader.class",
             "org.apache.velocity.runtime.resource.loader.FileResourceLoader"
         )
-        engine.addProperty("file.resource.loader.path", "")
-        engine.block()
-        engine.init()
-        velocityEngine = engine
+        engineBuilder.addProperty("file.resource.loader.path", "")
+        engineBuilder.block()
+        engineBuilder.init()
+        this.engine = engineBuilder
     }
 
     override fun load(fileTree: FileTree) {
-        val engine = velocityEngine
-            ?: throw IllegalStateException("Not configured. Cannot load templates before being configured.")
-
         templates.clear()
         fileTree.associateTo(templates) {
             it.name to engine.getTemplate(it.absolutePath)
