@@ -26,6 +26,11 @@ class TemplatePluginFunctionalTest {
             plugins {
                 id('dev.anies.gradle.template')
             }
+            
+//            template {
+//                engine = Freemarker().configure { cfg -> ... }
+//                data = [defaultData: "Data from the plugin block"]
+//            }
             """.trimIndent()
         )
     }

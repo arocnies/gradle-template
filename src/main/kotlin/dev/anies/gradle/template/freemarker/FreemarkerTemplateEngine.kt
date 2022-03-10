@@ -11,23 +11,35 @@ import kotlin.io.path.createFile
 import kotlin.io.path.notExists
 import kotlin.io.path.writer
 
-class FreemarkerTemplateEngine : TemplateEngine {
-    private val configuration: Configuration = Configuration(Version("2.3.31")).apply {
-        defaultEncoding = "UTF-8"
-        templateExceptionHandler = freemarker.template.TemplateExceptionHandler.RETHROW_HANDLER
-        logTemplateExceptions = false
-        fallbackOnNullLoopVariable = false
+class FreemarkerTemplateEngine : TemplateEngine<Configuration> {
+    private var configuration: Configuration? = null
+
+    override fun configure(block: Configuration.() -> Unit) {
+        val config = Configuration(Version("2.3.31")).apply {
+            defaultEncoding = "UTF-8"
+            templateExceptionHandler = freemarker.template.TemplateExceptionHandler.RETHROW_HANDLER
+            logTemplateExceptions = false
+            fallbackOnNullLoopVariable = false
+            block()
+        }
+        configuration = config
     }
 
     override fun load(fileTree: FileTree) {
-        configuration.templateLoader = FileTreeTemplateLoader(fileTree)
+        val config = configuration
+            ?: throw IllegalStateException("Not configured. Cannot load templates before being configured.")
+
+        config.templateLoader = FileTreeTemplateLoader(fileTree)
     }
 
     override fun processTemplate(source: Path, destination: Path, data: Map<String, Any?>): Boolean {
+        val config = configuration
+            ?: throw IllegalStateException("Not configured. Cannot process templates before being configured.")
+
         destination.parent.createDirectories()
         if (destination.notExists()) destination.createFile()
         destination.writer().use {
-            configuration.getTemplate(getTemplateKey(source)).process(data, it)
+            config.getTemplate(getTemplateKey(source)).process(data, it)
         }
         return true
     }

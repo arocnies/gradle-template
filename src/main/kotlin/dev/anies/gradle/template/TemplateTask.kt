@@ -20,9 +20,10 @@ abstract class TemplateTask : Copy() {
     var data = mutableMapOf<String, Any?>()
 
     private val _templatedFiles = mutableListOf<File>()
-    private val templateEngine: TemplateEngine = FreemarkerTemplateEngine()
+    private val templateEngine: TemplateEngine<*> = FreemarkerTemplateEngine()
 
     override fun createCopyAction(): CopyAction {
+        templateEngine.configure()
         templateEngine.load(mainSpec.buildRootResolver().allSource)
         return CopyAction { stream ->
             stream.process { details ->
