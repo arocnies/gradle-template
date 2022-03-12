@@ -79,6 +79,7 @@ class TemplateTaskFunctionalTest {
             }
             
             tasks.register("testTemplating", TemplateTask) {
+                engine = freemarker()
                 data += [test: "template"]
                 from('src/templates')
                 into('build/templates')

@@ -1,6 +1,5 @@
 package dev.anies.gradle.template
 
-import dev.anies.gradle.template.freemarker.FreemarkerTemplateEngine
 import org.gradle.api.internal.file.copy.CopyAction
 import org.gradle.api.tasks.Copy
 import org.gradle.api.tasks.Input
@@ -15,14 +14,25 @@ abstract class TemplateTask : Copy() {
     @Suppress("unused")
     val templatedFiles: List<File>
         @OutputFiles get() = _templatedFiles
+    private val _templatedFiles = mutableListOf<File>()
 
     @Input
     var data = mutableMapOf<String, Any?>()
 
-    private val _templatedFiles = mutableListOf<File>()
-    private val templateEngine: TemplateEngine<*> = FreemarkerTemplateEngine()
+    @Input
+    var engine: TemplateEngineFactory<*, *>? = null
+
+    private val templateEngine get() = getTemplateSelection()
+
+    private fun getTemplateSelection(): TemplateEngine<*> {
+        return if (engine == null) {
+            engine = project.extensions.getByType(TemplatePluginExtension::class.java)
+                .engine.get().engineGenerator()
+        } else engine.engineGenerator()
+    }
 
     override fun createCopyAction(): CopyAction {
+
         templateEngine.configure()
         templateEngine.load(mainSpec.buildRootResolver().allSource)
         return CopyAction { stream ->

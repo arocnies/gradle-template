@@ -28,7 +28,8 @@ class TemplatePluginFunctionalTest {
             }
             
 //            template {
-//                engine = Freemarker().configure { cfg -> ... }
+//                engine = Freemarker { cfg -> ... }
+//                engine = Velocity { cfg -> ... }
 //                data = [defaultData: "Data from the plugin block"]
 //            }
             """.trimIndent()
