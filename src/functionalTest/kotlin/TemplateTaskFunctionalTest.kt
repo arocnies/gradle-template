@@ -69,6 +69,7 @@ class TemplateTaskFunctionalTest {
         getBuildFile().writeText(
             """
             import dev.anies.gradle.template.TemplateTask
+            import static dev.anies.gradle.template.freemarker.FreemarkerTemplateEngineKt.*
             plugins {
                 id('dev.anies.gradle.template')
             }
@@ -79,6 +80,7 @@ class TemplateTaskFunctionalTest {
             }
             
             tasks.register("testTemplating", TemplateTask) {
+                engine = freemarker()
                 data += [test: "template"]
                 from('src/templates')
                 into('build/templates')

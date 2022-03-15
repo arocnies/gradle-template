@@ -12,7 +12,9 @@ import kotlin.io.path.notExists
 import kotlin.io.path.writer
 
 class FreemarkerTemplateEngine : TemplateEngine<Configuration> {
+    @Transient
     private lateinit var configuration: Configuration
+    private var configOperation: Configuration.() -> Unit = {}
 
     init {
         configure()
@@ -26,6 +28,7 @@ class FreemarkerTemplateEngine : TemplateEngine<Configuration> {
             fallbackOnNullLoopVariable = false
             block()
         }
+        configOperation = block
         configuration = config
     }
 
@@ -41,8 +44,10 @@ class FreemarkerTemplateEngine : TemplateEngine<Configuration> {
         }
         return true
     }
+
+    private fun getTemplateKey(path: Path): String {
+        return path.fileName.toString()
+    }
 }
 
-private fun getTemplateKey(path: Path): String {
-    return path.fileName.toString()
-}
+fun freemarker() = FreemarkerTemplateEngine()
