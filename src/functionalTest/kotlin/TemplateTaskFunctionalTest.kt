@@ -31,8 +31,8 @@ class TemplateTaskFunctionalTest {
     @Test
     fun `Templates file with properties value`() {
         val expectedFiles = setupTestProject()
-        val result = runBuild()
-        verifyResult(result, expectedFiles)
+        val results = runBuild()
+        verifyResult(results, expectedFiles)
     }
 
     private fun setupTestProject(): List<ExpectedFile> {
@@ -80,7 +80,7 @@ class TemplateTaskFunctionalTest {
             }
             
             tasks.register("testTemplating", TemplateTask) {
-                engine = freemarker()
+                engine = freemarker({})
                 data += [test: "template"]
                 from('src/templates')
                 into('build/templates')
@@ -92,20 +92,21 @@ class TemplateTaskFunctionalTest {
         getPropertiesFile().writeText("example=World!\n")
     }
 
-    private fun runBuild(): BuildResult {
+    private fun runBuild(): List<BuildResult> {
         val runner = GradleRunner.create()
         runner.forwardOutput()
         runner.withPluginClasspath()
         runner.withProjectDir(getProjectDir())
         runner.withArguments("--stacktrace", "testTemplating")
         runner.withDebug(true)
-        return runner.build()
+        return listOf(runner.build(), runner.build())
     }
 
-    private fun verifyResult(result: BuildResult, expectedFiles: List<ExpectedFile>) {
+    private fun verifyResult(results: List<BuildResult>, expectedFiles: List<ExpectedFile>) {
         println("Test project files:")
         getProjectDir().walkTopDown().forEach { println(it) }
-        assertTrue(result.tasks.all { it.outcome == TaskOutcome.SUCCESS })
+        assertTrue(results[0].tasks.all { it.outcome == TaskOutcome.SUCCESS })
+        assertTrue(results[1].tasks.all { it.outcome == TaskOutcome.UP_TO_DATE })
         assertTrue(getTemplateTestOutput().exists())
         for (expected in expectedFiles) {
             val finalPath = getProjectDir().toPath().resolve(Path.of(expected.dest))

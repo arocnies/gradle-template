@@ -5,7 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.6.10"
 }
 
-version = "0.0.2"
+version = "0.0.2-SNAPSHOT"
 group = "dev.anies.gradle.template"
 
 repositories {
@@ -24,6 +24,7 @@ dependencies {
 }
 
 gradlePlugin {
+    @Suppress("UNUSED_VARIABLE")
     val template by plugins.creating {
         id = "dev.anies.gradle.template"
         implementationClass = "dev.anies.gradle.template.TemplatePlugin"

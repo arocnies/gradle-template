@@ -5,12 +5,16 @@ import org.apache.velocity.Template
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.VelocityEngine
 import org.gradle.api.file.FileTree
+import java.io.Serializable
 import java.nio.file.Path
 import kotlin.io.path.writer
 
-class VelocityTemplateEngine : TemplateEngine<VelocityEngine> {
+class VelocityTemplateEngine : TemplateEngine<VelocityEngine>() {
     private lateinit var engine: VelocityEngine
     private val templates = mutableMapOf<String, Template>()
+
+    override val settings: Map<String, Serializable?>
+        get() = emptyMap() // TODO: Switch the properties to be saved instead of added one-by-one to the engineBuilder.
 
     init {
         configure()
@@ -20,8 +24,7 @@ class VelocityTemplateEngine : TemplateEngine<VelocityEngine> {
         val engineBuilder = VelocityEngine()
         engineBuilder.addProperty("resource.loader", "file")
         engineBuilder.addProperty(
-            "file.resource.loader.class",
-            "org.apache.velocity.runtime.resource.loader.FileResourceLoader"
+            "file.resource.loader.class", "org.apache.velocity.runtime.resource.loader.FileResourceLoader"
         )
         engineBuilder.addProperty("file.resource.loader.path", "")
         engineBuilder.block()

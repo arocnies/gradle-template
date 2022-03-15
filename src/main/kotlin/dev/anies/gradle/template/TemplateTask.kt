@@ -1,10 +1,7 @@
 package dev.anies.gradle.template
 
 import org.gradle.api.internal.file.copy.CopyAction
-import org.gradle.api.tasks.Copy
-import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.OutputFiles
-import org.gradle.api.tasks.WorkResults
+import org.gradle.api.tasks.*
 import java.io.File
 import java.nio.file.Path
 import kotlin.io.path.relativeTo
@@ -18,7 +15,7 @@ abstract class TemplateTask : Copy() {
     @Input
     var data = mutableMapOf<String, Any?>()
 
-    @Input
+    @Nested
     lateinit var engine: TemplateEngine<*>
     private val _templatedFiles = mutableListOf<File>()
 

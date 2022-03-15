@@ -5,16 +5,24 @@ import dev.anies.gradle.template.TemplateEngine
 import freemarker.template.Configuration
 import freemarker.template.Version
 import org.gradle.api.file.FileTree
+import java.io.Serializable
 import java.nio.file.Path
 import kotlin.io.path.createDirectories
 import kotlin.io.path.createFile
 import kotlin.io.path.notExists
 import kotlin.io.path.writer
 
-class FreemarkerTemplateEngine : TemplateEngine<Configuration> {
+class FreemarkerTemplateEngine : TemplateEngine<Configuration>() {
     @Transient
     private lateinit var configuration: Configuration
-    private var configOperation: Configuration.() -> Unit = {}
+
+    /*
+    We accept exposing this deprecated method to the parent protected field since it's the only reasonable way to
+    capture Freemarker Configuration for serializable comparison and it will not be used outside this class.
+    */
+    @Suppress("DEPRECATION", "UNCHECKED_CAST")
+    override val settings: Map<String, Serializable?>
+        get() = configuration.settings as Map<String, Serializable?>
 
     init {
         configure()
@@ -28,7 +36,6 @@ class FreemarkerTemplateEngine : TemplateEngine<Configuration> {
             fallbackOnNullLoopVariable = false
             block()
         }
-        configOperation = block
         configuration = config
     }
 
@@ -50,4 +57,6 @@ class FreemarkerTemplateEngine : TemplateEngine<Configuration> {
     }
 }
 
-fun freemarker() = FreemarkerTemplateEngine()
+@Suppress("unused")
+@JvmOverloads
+fun freemarker(config: Configuration.() -> Unit = {}) = FreemarkerTemplateEngine().also { it.configure(config) }
