@@ -28,8 +28,28 @@ class VelocityTemplateEngine : TemplateEngine<VelocityEngine>() {
         )
         engineBuilder.addProperty("file.resource.loader.path", "")
         engineBuilder.block()
-        engineBuilder.init()
+
+        // We must use another class loader to avoid Velocity bug that causes a failure when
+        // Velocity loads its logger from multiple modules.
+        // See (https://stackoverflow.com/questions/45006042/velocity-initialization-failing)
+        usingClassLoader(javaClass.classLoader) {
+            engineBuilder.init()
+        }
         this.engine = engineBuilder
+    }
+
+    /**
+     * Switches the current thread's class loader in the context of the block.
+     */
+    private fun usingClassLoader(classLoader: ClassLoader, block: () -> Unit) {
+        val currentThread = Thread.currentThread()
+        val savedClassLoader = currentThread.contextClassLoader
+        try {
+            currentThread.contextClassLoader = classLoader
+            block()
+        } finally {
+            currentThread.contextClassLoader = savedClassLoader
+        }
     }
 
     override fun load(fileTree: FileTree) {
@@ -48,3 +68,7 @@ class VelocityTemplateEngine : TemplateEngine<VelocityEngine>() {
         return true
     }
 }
+
+@Suppress("unused")
+@JvmOverloads
+fun velocity(config: VelocityEngine.() -> Unit = {}) = VelocityTemplateEngine().also { it.configure(config) }

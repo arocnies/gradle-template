@@ -4,24 +4,17 @@ import org.junit.runners.Parameterized
 import kotlin.test.Test
 
 @RunWith(Parameterized::class)
-class TemplateTaskTest(private val templateEngine: String) {
+class SimpleTemplateTest(private val engineInstantiationExpression: EngineInstantiationExpression) {
     companion object {
         @Parameterized.Parameters(name = "{index}: Engine \"{0}\"")
         @JvmStatic
-        fun getTemplateEngines() = listOf("freemarker()", "freemarker({})")
-    }
-
-    @Test
-    fun `template plugin loads`() {
-        val gradleProject = GradleProject()
-        gradleProject.writeProject()
-        val result = gradleProject.run("build")
-        assert(result.tasks.all { it.outcome == TaskOutcome.SUCCESS })
+        fun getTemplateEngines(): List<EngineInstantiationExpression> = engineExpressions
     }
 
     @Test
     fun `templates file with project property`() {
         val gradleProject = GradleProject()
+        gradleProject.importLines += engineInstantiationExpression.importLine
         gradleProject.expectedFiles += listOf(
             ExpectedFile(
                 source = "src/templates/example.txt.ftl",
@@ -30,9 +23,9 @@ class TemplateTaskTest(private val templateEngine: String) {
                 expectedContent = "Hello World!\nThis is a template"
             )
         )
-        gradleProject.buildFileContent += """
+        gradleProject.buildFileBody += """
             tasks.register("testTemplating", TemplateTask) {
-                engine = $templateEngine
+                engine = ${engineInstantiationExpression.expression}
                 data += [test: "template"]
                 from('src/templates')
                 into('build/templates')

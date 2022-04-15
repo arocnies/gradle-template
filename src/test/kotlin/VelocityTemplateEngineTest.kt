@@ -9,7 +9,7 @@ class VelocityTemplateEngineTest {
     @Test
     fun `Velocity templates basic file`() {
         val engine = VelocityTemplateEngine()
-        val source = File(javaClass.getResource("velocity.template").toURI()).toPath()
+        val source = File(javaClass.getResource("velocity.template")!!.toURI()).toPath()
         val dest = kotlin.io.path.createTempFile().toAbsolutePath()
         @Suppress("unused") val data = mapOf(
             "message" to "test-message",

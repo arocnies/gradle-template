@@ -14,20 +14,51 @@ data class ExpectedFile(
     val expectedContent: String
 )
 
+data class EngineInstantiationExpression(val importLine: String, val expression: String)
+
+val engineExpressions = listOf(
+    EngineInstantiationExpression(
+        "import static dev.anies.gradle.template.freemarker.FreemarkerTemplateEngineKt.*",
+        "freemarker()"
+    ),
+    EngineInstantiationExpression(
+        "import static dev.anies.gradle.template.freemarker.FreemarkerTemplateEngineKt.*",
+        "freemarker({})"
+    ),
+    EngineInstantiationExpression(
+        "import dev.anies.gradle.template.freemarker.FreemarkerTemplateEngine",
+        "new FreemarkerTemplateEngine()"
+    ),
+    EngineInstantiationExpression(
+        "import static dev.anies.gradle.template.velocity.VelocityTemplateEngineKt.*",
+        "velocity()"
+    ),
+    EngineInstantiationExpression(
+        "import static dev.anies.gradle.template.velocity.VelocityTemplateEngineKt.*",
+        "velocity({})"
+    ),
+    EngineInstantiationExpression(
+        "import dev.anies.gradle.template.velocity.VelocityTemplateEngine",
+        "new VelocityTemplateEngine()"
+    ),
+)
+
 class GradleProject {
     private val tempFolder = createTempDirectory().toFile()
     val expectedFiles: MutableList<ExpectedFile> = mutableListOf()
     val importLines = mutableListOf(
-        "import dev.anies.gradle.template.TemplateTask",
-        "import static dev.anies.gradle.template.freemarker.FreemarkerTemplateEngineKt.*"
+        "import dev.anies.gradle.template.TemplateTask"
     )
-    val initialBuildFileContent = """
-        ${importLines.joinToString("\n")}
+
+    fun getBuildFileContent() = "${importLines.joinToString("\n")}\n${buildFileBody.trimIndent()}\n\n"
+//    fun getBuildFileContent() = "${importLines.joinToString("\n")}\n${buildFileBody.trimIndent()}\n\n"
+
+    var buildFileBody = """
         plugins {
             id('dev.anies.gradle.template')
         }
-        """.trimIndent() + "\n"
-    var buildFileContent = initialBuildFileContent
+        
+        """.trimIndent()
     val properties = mutableMapOf<String, String>()
     private val runner = GradleRunner.create().also {
         it.forwardOutput()
@@ -54,7 +85,7 @@ class GradleProject {
     private fun writeGradleProjectFiles() {
         getProjectDir().toPath().createDirectories()
         getSettingsFile().writeText("")
-        getBuildFile().writeText(buildFileContent)
+        getBuildFile().writeText(getBuildFileContent())
         getPropertiesFile().writeText(properties.map { (k, v) -> "$k=$v" }.joinToString("\n"))
     }
 
