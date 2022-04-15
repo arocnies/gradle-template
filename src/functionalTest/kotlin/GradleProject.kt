@@ -17,9 +17,12 @@ data class ExpectedFile(
 class GradleProject {
     private val tempFolder = createTempDirectory().toFile()
     val expectedFiles: MutableList<ExpectedFile> = mutableListOf()
+    val importLines = mutableListOf(
+        "import dev.anies.gradle.template.TemplateTask",
+        "import static dev.anies.gradle.template.freemarker.FreemarkerTemplateEngineKt.*"
+    )
     val initialBuildFileContent = """
-        import dev.anies.gradle.template.TemplateTask
-        import static dev.anies.gradle.template.freemarker.FreemarkerTemplateEngineKt.*
+        ${importLines.joinToString("\n")}
         plugins {
             id('dev.anies.gradle.template')
         }
