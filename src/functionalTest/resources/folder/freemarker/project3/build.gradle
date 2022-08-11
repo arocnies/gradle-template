@@ -1,0 +1,14 @@
+import dev.anies.gradle.template.TemplateTask
+import dev.anies.gradle.template.freemarker.FreemarkerTemplateEngine
+
+plugins {
+    id('dev.anies.gradle.template')
+}
+
+tasks.register("testTemplating", TemplateTask) {
+    engine = new FreemarkerTemplateEngine()
+    data += [test: "template"]
+    from('src/templates')
+    into('build/templates')
+    rename("(.+).ftl", "\$1")
+}

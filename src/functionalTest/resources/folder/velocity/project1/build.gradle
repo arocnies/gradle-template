@@ -1,0 +1,15 @@
+import dev.anies.gradle.template.TemplateTask
+
+import static dev.anies.gradle.template.velocity.VelocityTemplateEngineKt.*
+
+plugins {
+    id('dev.anies.gradle.template')
+}
+
+tasks.register("testTemplating", TemplateTask) {
+    engine = velocity()
+    data += [test: "template"]
+    from('src/templates')
+    into('build/templates')
+    rename("(.+).ftl", "\$1")
+}
