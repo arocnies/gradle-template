@@ -48,7 +48,7 @@ class GradleProject {
     val expectedFiles: MutableList<ExpectedFile> = mutableListOf()
     val importLines = mutableListOf(
         "import dev.anies.gradle.template.TemplateTask"
-    )
+    ) + engineExpressions.map { it.importLine }
 
     fun getBuildFileContent() = "${importLines.joinToString("\n")}\n${buildFileBody.trimIndent()}\n\n"
 //    fun getBuildFileContent() = "${importLines.joinToString("\n")}\n${buildFileBody.trimIndent()}\n\n"
