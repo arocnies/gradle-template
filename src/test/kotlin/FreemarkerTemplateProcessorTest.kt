@@ -27,8 +27,9 @@ class FreemarkerTemplateProcessorTest {
             Test message: test-message
             Test property objects: obj-text
             Test obj methods: obj-method
-        """.trimIndent(),
+            """.trimIndent(),
             dest.readText()
+                .replace("\r\n", "\n")
         )
     }
 }

@@ -29,6 +29,7 @@ class VelocityTemplateProcessorTest {
             Test obj methods: obj-method
         """.trimIndent(),
             dest.readText()
+                .replace("\r\n", "\n")
         )
     }
 }
